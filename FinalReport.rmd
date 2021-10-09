@@ -1,7 +1,7 @@
 ---
 title: "GSS challange"
-author: "Put your name here!"
-date: "put the date here"
+author: "Adriana Pimentel"
+date: "10/9/2021"
 output: html_document
 ---
 
@@ -9,7 +9,9 @@ output: html_document
 require(tidyverse)
 require(tigerstats)
 require(knitr)
+require(foreign)
 GSS <-read.csv(file="GSScsv.csv",header=TRUE)
+GSS<-read.dta("GSS2018.dta")
 ```
 
 # Introduction
@@ -22,6 +24,14 @@ If not, then whose view differs from whom??
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method. Discuss what data manipulations may be needed for example subsetting or other binning procedures and what sort of graphical displays and inferential tools will be used!-->
+
+We first need to get a small subset of data out of the GSS data set. To do that, we will get out the variables race and cappun. 
+```{r}
+ourdata<-select(GSS, race, cappun)
+ourdata2<-na.omit(ourdata)
+```
+
+
 
 # Results
 
