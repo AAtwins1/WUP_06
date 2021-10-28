@@ -19,14 +19,14 @@ GSS<-droplevels(GSS)
 
 <!--In this section you explain what you are trying to show.  Where did the data come from?  What is the research or other question you are trying to answer?.  If you skimp in this section expect to be marked down in your grade. Paint a picture of the project a couple of paragraphs is expected!-->
 
-Is attitude toward capitol punishment (CAPPUN) independent of RACE (RACE)?
+Is attitude toward capitol punishment (CAPPUN) independent of race (RACE)?
 If not, then whose view differs from whom??
 
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method. Discuss what data manipulations may be needed for example subsetting or other binning procedures and what sort of graphical displays and inferential tools will be used!-->
 
-We first need to get a small subset of data out of the GSS data set. To do that, we will get out the variables race and CAPPUN. 
+We first need to get a small subset of data out of the GSS data set. To do that, we will get out the variables RACE and CAPPUN. 
 
 # Results
 
@@ -135,5 +135,139 @@ The inferential results prove that there is a difference between the black and o
 
 # Discussion and Conclusion
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+    
+We looked at the plots that showed that the white community was more likely to be in favor of capital punishment as well as the other communities. Whereas, the black community was more opposed to capital punishment. The numerical results further proved this argument. Showing that, 68% of the white community was in favor of capital punishment and 83% of other communities were also in favor of it. While, the black community was more opposed to capital punishment by 65%. The inferential results showed a fisherXY test and confirmed that the stance of the black community is greatly different than the stance of the white and other community.
   
-We looked at the plots that showed that the white community was more likely to be in favor of capital punishment as well as the other communities. Whereas, the black community was more opposed to capital punishment. The numerical results further proved this argument. Showing that, 68% of the white community was in favor of capital punishment and 83% of other communities were also in favor of it. While, the black community was more opposed to capital punishment by 65%. The inferential results showed a fisherXY test and confirmed that the stance of the black community is greatly different than the stance of the white and other community. 
+-----------------------------------------------------------------
+```{r include=FALSE,echo=FALSE}
+require(tidyverse)
+require(tigerstats)
+require(knitr)
+require(foreign)
+#GSS <-read.csv(file="GSScsv.csv",header=TRUE)
+GSS<-read.dta("GSS2018.dta")
+GSS<-droplevels(GSS)
+```
+
+# Introduction
+
+<!--In this section you explain what you are trying to show.  Where did the data come from?  What is the research or other question you are trying to answer?.  If you skimp in this section expect to be marked down in your grade. Paint a picture of the project a couple of paragraphs is expected!-->
+
+Is attitude toward capitol punishment (cappun) independent of race (race)?
+If not, then whose view differs from whom??
+
+# Methods
+
+<!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method. Discuss what data manipulations may be needed for example subsetting or other binning procedures and what sort of graphical displays and inferential tools will be used!-->
+
+We first need to get a small subset of data out of the GSS2018.dta set. To do that, we will get out the variables race and cappun.   
+
+# Results
+
+<!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
+
+## Descriptive Results
+
+### Graphical Descriptive Results
+
+<!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question. Bottom line is to explain the features of the graph that are relevant to conforming or departing to what is expected by your null hypothesis !-->
+
+```{r}
+barchartGC(~ race + cappun,data=GSS)
+barchartGC(~ race + cappun,data=GSS, type="percent")
+```
+  
+The great difference we can see in this graph is among the black community, showing that the majority of the black community opposes capital punishment. Whereas, the majority of the white and other communities support capital punishment.    
+    
+### Numerical Descriptive Results
+
+<!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+
+```{r}
+table2 <- xtabs(~race + cappun, data=GSS)
+rowPerc(table2)
+colPerc(table2)
+```
+    
+The numerical data shows that about 68% of the white community is in favor of capital punishment and the other 32% opposes it. People in the other communities seem to also favor capital punishment, having 56% of the population in this community favor it rather than oppose it. While, in the black community, more people oppose capital punishment by about 54% compared to favoring it by 46%. This still supports the statement that there is a difference between the black community and white and other communities regarding their stance on capital  punishment. However, since we now have a greater data set, the difference between the percentage of people in favor versus opposed to capital punishment in the black and other communities is smaller.   
+    
+## Inferential Results
+
+<!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
+
+```{r}
+fisherXY = function(x, y, confL = 0, printAll=FALSE){
+  # Inputs: 
+  #   x: factor variable, 2 levels
+  #   y: factor variable, n levels
+  # confL: confidence level, default = 0.95
+  #        print only those tables, results if p-value < (1-confL)
+  # printAll: overide the 'print only if p-value < (1-confL), and
+  #           print all tables and fisher test results
+  #
+  # Constraint:
+  #   x and y must be same length
+  #
+  # Outputs:
+  #   All 2x2 Fisher exact tests
+  
+  if(confL<0 || confL> 1){
+    print('error: confL must be between 0 and 1')
+    return(999)
+  }
+  
+  if(!is.factor(x)) x=as.factor(x)
+  if(!is.factor(y)) y=as.factor(y)
+  
+  fisherTable = as.matrix(table(x, y))
+  cat('\ncontingency table:\n')
+  print(fisherTable)
+  cat('\n***All 2X2 tests****\n\n')
+
+  # all 2x2 tests
+  levelsY = levels(y)
+  levelsX = levels(x)
+  
+  m = length(levelsX)
+  n = length(levelsY)
+  
+  confLevel = 0.95
+  if (confL !=0 ) confLevel=confL
+  
+  for (i in 1:(m-1))
+       for(j in ((i+1):m))
+          for (k in 1:(n-1))
+             for (l in ((k+1):n)) {
+                
+                 fisherIndexX = c(i,j)
+                 fisherIndexY = c(k,l)
+                 
+                 fTempTable = as.matrix(fisherTable[fisherIndexX,
+                                        fisherIndexY])
+                 
+                 fisherTest=fisher.test(fTempTable, conf.int = TRUE, 
+                              conf.level = confLevel)
+                 
+                 if((fisherTest$p.value < (1-confLevel) ) || printAll){
+                   
+                       print(c(levelsX[i], levelsX[j]))
+                       print(c(levelsY[k], levelsY[l]))
+                       print(fTempTable)
+                       print(fisherTest)
+                       cat('\n')
+                 }
+                 
+        }
+}
+
+```
+```{r}
+fisherXY(GSS$race,GSS$cappun)
+```
+  
+Here the inferential results shows a smaller p-value between the white and black community compared to the previous data set. It also includes a p-value of .0002819 between the white community and other communities. It also shows a new p-value of .02479 between the black and other communities. The new results of the respective p-values is due to the greater amount of data given. 
+
+# Discussion and Conclusion
+<!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+    
+At first we tried this problem with a smaller data set, then we used a bigger data set to view the different plots, numerical data, and p-values shown in the inferential results. The plots and numerical data still showed that the white community was more likely to be in favor of capital punishment as well as the other communities. Whereas, the black community was more opposed to capital punishment. However, since we used a larger data set the differences between how many people were in favor versus opposed to capital punishment in each group, was much smaller. The inferential results showed three different p-values this time, including a p-value of the white community and the other communities. This comes to show that with a larger data set we are able to make more accurate distinctions compared to when looking at a smaller data set.      
