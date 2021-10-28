@@ -42,7 +42,9 @@ We first need to get a small subset of data out of the GSS data set. To do that,
 barchartGC(~ RACE + CAPPUN,data=GSS)
 barchartGC(~ RACE + CAPPUN,data=GSS, type="percent")
 ```
-
+  
+The great difference we can see in this graph is among the black community, showing that the majority of the black community opposes capital punishment. Whereas, the majority of the white and other communities support capital punishment.    
+    
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
@@ -52,7 +54,9 @@ table2 <- xtabs(~RACE + CAPPUN, data=GSS)
 rowPerc(table2)
 colPerc(table2)
 ```
-
+    
+The numerical data shows that about 68% of the white community is in favor of capital punishment and the other 32% opposes it. People in the other communities seem to also favor capital punishment, having 83% of the people in this community favor it rather than oppose it. While, in the black community, more people oppose capital punishment by 65% compared to favoring it by 35%. This supports the statement that there is a difference between the black community and white and other communities regarding their stance on capital  punishment.    
+    
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
@@ -126,7 +130,8 @@ fisherXY = function(x, y, confL = 0, printAll=FALSE){
 ```{r}
 fisherXY(GSS$RACE,GSS$CAPPUN)
 ```
-
+  
+The inferential results proves that there is a difference between the white and other communities, as well as, the black and other communities regarding which side they each stand with capital punishment. This can be shown through the p-values shown respectively.
 
 # Discussion and Conclusion
 
