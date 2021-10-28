@@ -131,8 +131,9 @@ fisherXY = function(x, y, confL = 0, printAll=FALSE){
 fisherXY(GSS$RACE,GSS$CAPPUN)
 ```
   
-The inferential results proves that there is a difference between the white and other communities, as well as, the black and other communities regarding which side they each stand with capital punishment. This can be shown through the p-values shown respectively.
+The inferential results prove that there is a difference between the black and other communities, as well as, the black and the white communities regarding which side they each stand with capital punishment. This can be shown through the p-values given respectively.
 
 # Discussion and Conclusion
-
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+  
+We looked at the plots that showed that the white community was more likely to be in favor of capital punishment as well as the other communities. Whereas, the black community was more opposed to capital punishment. The numerical results further proved this argument. Showing that, 68% of the white community was in favor of capital punishment and 83% of other communities were also in favor of it. While, the black community was more opposed to capital punishment by 65%. The inferential results showed a fisherXY test and confirmed that the stance of the black community is greatly different than the stance of the white and other community. 
